@@ -9,7 +9,7 @@ let additionalDescriptions = [];
 let currentModelDescriptions = []; // Added for model descriptions
 
 // API Base URL
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://web-production-870dd.up.railway.app/api';
 
 // Initialize application
 document.addEventListener('DOMContentLoaded', function() {

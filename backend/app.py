@@ -19,7 +19,7 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # CORS configuration for production
 CORS(app, 
-     origins=['https://your-frontend-domain.com', 'http://localhost:8000', 'http://127.0.0.1:8000'], 
+     origins=['*'], 
      supports_credentials=True, 
      allow_headers=['Content-Type', 'Authorization'])
 

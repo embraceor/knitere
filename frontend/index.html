@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knitwear ERP Sistemi</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-container">
+            <div class="login-header">
+                <h1><i class="fas fa-tshirt"></i> Knitwear ERP</h1>
+                <p>Giriş yapın</p>
+            </div>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">Kullanıcı Adı</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Şifre</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Giriş Yap
+                </button>
+            </form>
+            <div class="login-info">
+                <p><strong>Demo Kullanıcı:</strong></p>
+                <p>Kullanıcı Adı: admin</p>
+                <p>Şifre: admin123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application Screen -->
+    <div id="mainScreen" class="screen">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <h1><i class="fas fa-tshirt"></i> Knitwear ERP</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span id="currentUser">Kullanıcı</span>
+                    <button id="logoutBtn" class="btn btn-sm btn-outline">
+                        <i class="fas fa-sign-out-alt"></i> Çıkış
+                    </button>
+                </div>
+                <div class="session-info">
+                    <span id="sessionTimer">10:00</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="tab-navigation">
+            <button class="tab-btn active" data-tab="dashboard">
+                <i class="fas fa-chart-bar"></i> Dashboard
+            </button>
+            <button class="tab-btn" data-tab="customers">
+                <i class="fas fa-users"></i> Müşteriler
+            </button>
+            <button class="tab-btn" data-tab="models">
+                <i class="fas fa-tshirt"></i> Modeller
+            </button>
+            <button class="tab-btn" data-tab="orders">
+                <i class="fas fa-shopping-cart"></i> Siparişler
+            </button>
+        </nav>
+
+        <!-- Tab Content -->
+        <main class="tab-content">
+            <!-- Dashboard Tab -->
+            <div id="dashboard-tab" class="tab-panel active">
+                <div class="panel-header">
+                    <h2>Dashboard</h2>
+                    <div class="panel-actions">
+                        <button id="refreshDashboardBtn" class="btn btn-sm btn-outline">
+                            <i class="fas fa-sync-alt"></i> Yenile
+                        </button>
+                    </div>
+                </div>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalCustomers">0</h3>
+                            <p>Toplam Müşteri</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalModels">0</h3>
+                            <p>Toplam Model</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalOrders">0</h3>
+                            <p>Toplam Sipariş</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="pendingApprovals">0</h3>
+                            <p>Bekleyen Onay</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-content">
+                    <div class="dashboard-section">
+                        <h3>Son Siparişler</h3>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Sipariş No</th>
+                                        <th>Müşteri</th>
+                                        <th>Model</th>
+                                        <th>Adet</th>
+                                        <th>Durum</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentOrdersTableBody">
+                                    <!-- Son siparişler buraya yüklenecek -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customers Tab -->
+            <div id="customers-tab" class="tab-panel">
+                <div class="panel-header">
+                    <h2>Müşteri Yönetimi</h2>
+                    <div class="panel-actions">
+                        <button id="refreshCustomersBtn" class="btn btn-sm btn-outline">
+                            <i class="fas fa-sync-alt"></i> Yenile
+                        </button>
+                        <button id="addCustomerBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Yeni Müşteri
+                        </button>
+                    </div>
+                </div>
+                <div class="search-filter">
+                    <input type="text" id="customerSearch" placeholder="Müşteri ara...">
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Müşteri No</th>
+                                <th>Ad Soyad</th>
+                                <th>Telefon</th>
+                                <th>E-posta</th>
+                                <th>Adres</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customersTableBody">
+                            <!-- Müşteriler buraya yüklenecek -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Models Tab -->
+            <div id="models-tab" class="tab-panel">
+                <div class="panel-header">
+                    <h2>Model Yönetimi</h2>
+                    <div class="panel-actions">
+                        <button id="refreshModelsBtn" class="btn btn-sm btn-outline">
+                            <i class="fas fa-sync-alt"></i> Yenile
+                        </button>
+                        <button id="addModelBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Yeni Model
+                        </button>
+                    </div>
+                </div>
+                <div class="search-filter">
+                    <input type="text" id="modelSearch" placeholder="Model ara...">
+                    <select id="modelStatusFilter">
+                        <option value="">Tüm Durumlar</option>
+                        <option value="pending">Beklemede</option>
+                        <option value="approved">Onaylandı</option>
+                        <option value="rejected">Reddedildi</option>
+                    </select>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Resim</th>
+                                <th>Model No</th>
+                                <th>Model Adı</th>
+                                <th>Model Order No</th>
+                                <th>Müşteri</th>
+                                <th>Açılış Tarihi</th>
+                                <th>Termin Tarihi</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modelsTableBody">
+                            <!-- Modeller buraya yüklenecek -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Orders Tab -->
+            <div id="orders-tab" class="tab-panel">
+                <div class="panel-header">
+                    <h2>Sipariş Yönetimi</h2>
+                    <div class="panel-actions">
+                        <button id="refreshOrdersBtn" class="btn btn-sm btn-outline">
+                            <i class="fas fa-sync-alt"></i> Yenile
+                        </button>
+                        <button id="addOrderBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Yeni Sipariş
+                        </button>
+                    </div>
+                </div>
+                <div class="search-filter">
+                    <input type="text" id="orderSearch" placeholder="Sipariş ara...">
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Sipariş No</th>
+                                <th>Müşteri</th>
+                                <th>Model</th>
+                                <th>Adet</th>
+                                <th>Tarih</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Siparişler buraya yüklenecek -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Customer Modal -->
+    <div id="customerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="customerModalTitle">Yeni Müşteri Ekle</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="customerForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="customerNo">Müşteri No</label>
+                        <input type="text" id="customerNo" name="customer_no" placeholder="Otomatik oluşturulacak">
+                    </div>
+                    <div class="form-group">
+                        <label for="customerName">Ad Soyad *</label>
+                        <input type="text" id="customerName" name="name" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="customerPhone">Telefon</label>
+                        <input type="tel" id="customerPhone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="customerEmail">E-posta</label>
+                        <input type="email" id="customerEmail" name="email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="customerAddress">Adres</label>
+                    <textarea id="customerAddress" name="address" rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeCustomerModal()">İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Model Modal -->
+    <div id="modelModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="modelModalTitle">Yeni Model Ekle</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-tabs">
+                <div class="tab-nav">
+                    <button type="button" class="tab-btn active" data-tab="general">Genel</button>
+                    <button type="button" class="tab-btn" data-tab="sizes">Bedenler</button>
+                    <button type="button" class="tab-btn" data-tab="images">Resimler</button>
+                    <button type="button" class="tab-btn" data-tab="descriptions">Açıklamalar</button>
+                </div>
+                
+                <form id="modelForm">
+                    <!-- General Tab -->
+                    <div id="general-tab" class="tab-panel active">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="modelNo">Model No</label>
+                                <input type="text" id="modelNo" name="model_no" placeholder="Otomatik oluşturulacak">
+                            </div>
+                            <div class="form-group">
+                                <label for="modelName">Model Adı *</label>
+                                <input type="text" id="modelName" name="model_name" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="customerSelect">Müşteri</label>
+                                <select id="customerSelect" name="customer_id">
+                                    <option value="">Müşteri Seçin</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="modelOrderNo">Model Order No</label>
+                                <input type="text" id="modelOrderNo" name="model_order_no">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="openingDate">Açılış Tarihi</label>
+                                <input type="text" id="openingDate" name="opening_date" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="dueDate">Termin Tarihi</label>
+                                <input type="text" id="dueDate" name="due_date" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="dueDays">Termin Gün Sayısı</label>
+                                <input type="number" id="dueDays" name="due_days" min="0" max="365">
+                            </div>
+                            <div class="form-group">
+                                <label for="modelGroup">Model Grubu</label>
+                                <input type="text" id="modelGroup" name="model_group">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="composition">Kompozisyon</label>
+                            <textarea id="composition" name="composition" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Sizes Tab -->
+                    <div id="sizes-tab" class="tab-panel">
+                        <div class="sizes-header">
+                            <h4>Model Bedenleri ve Üretim Adetleri</h4>
+                            <button type="button" id="addSizeBtn" class="btn btn-sm btn-primary">
+                                <i class="fas fa-plus"></i> Yeni Beden Ekle
+                            </button>
+                        </div>
+                        <div id="sizesList" class="sizes-list">
+                            <div class="no-sizes-message">
+                                <i class="fas fa-tshirt"></i>
+                                <p>Henüz beden eklenmemiş</p>
+                                <small>Yeni beden eklemek için butona tıklayın</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Images Tab -->
+                    <div id="images-tab" class="tab-panel">
+                        <div class="image-upload-area" id="imageUploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Resim yüklemek için tıklayın veya sürükleyin</p>
+                            <input type="file" id="imageInput" multiple accept="image/*" style="display: none;">
+                        </div>
+                        <div id="imageGallery" class="image-gallery">
+                            <!-- Resimler buraya yüklenecek -->
+                        </div>
+                    </div>
+
+                    <!-- Descriptions Tab -->
+                    <div id="descriptions-tab" class="tab-panel">
+                        <div class="form-group">
+                            <label for="generalDescription">Model Genel Açıklaması</label>
+                            <textarea id="generalDescription" name="general_description" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="sewingInstructions">Dikim Talimatları</label>
+                            <textarea id="sewingInstructions" name="sewing_instructions" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="sampleDescription">Numune Açıklaması</label>
+                            <textarea id="sampleDescription" name="sample_description" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="packagingDetails">Paketleme Detayları</label>
+                            <textarea id="packagingDetails" name="packaging_details" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="accessoryDescription">Aksesuar Açıklamaları</label>
+                            <textarea id="accessoryDescription" name="accessory_description" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="printEmbroidery">Baskı Nakış Açıklamaları</label>
+                            <textarea id="printEmbroidery" name="print_embroidery" rows="3"></textarea>
+                        </div>
+                        <div class="additional-descriptions">
+                            <h4>Eklenebilir Açıklamalar</h4>
+                            <button type="button" id="addDescriptionBtn" class="btn btn-sm btn-outline">
+                                <i class="fas fa-plus"></i> Yeni Açıklama Ekle
+                            </button>
+                            <div id="additionalDescriptionsList">
+                                <!-- Ek açıklamalar buraya eklenecek -->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="closeModelModal()">İptal</button>
+                <button type="submit" form="modelForm" class="btn btn-primary">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="orderModalTitle">Yeni Sipariş Ekle</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="orderForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="orderNo">Sipariş No</label>
+                        <input type="text" id="orderNo" name="siparis_no" placeholder="Otomatik oluşturulacak">
+                    </div>
+                    <div class="form-group">
+                        <label for="orderDate">Sipariş Tarihi</label>
+                        <input type="date" id="orderDate" name="siparis_tarihi" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="orderCustomerSelect">Müşteri *</label>
+                        <select id="orderCustomerSelect" name="musteri_id" required>
+                            <option value="">Müşteri Seçin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderModelSelect">Model *</label>
+                        <select id="orderModelSelect" name="model_id" required>
+                            <option value="">Model Seçin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="deliveryDate">Teslim Tarihi</label>
+                        <input type="date" id="deliveryDate" name="teslim_tarihi">
+                    </div>
+                    <div class="form-group">
+                        <label for="orderStatus">Durum</label>
+                        <select id="orderStatus" name="durum">
+                            <option value="pending">Beklemede</option>
+                            <option value="processing">İşleniyor</option>
+                            <option value="completed">Tamamlandı</option>
+                            <option value="cancelled">İptal Edildi</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="totalQuantity">Toplam Adet *</label>
+                        <input type="number" id="totalQuantity" name="toplam_adet" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="unitPrice">Birim Fiyat (TL)</label>
+                        <input type="number" id="unitPrice" name="birim_fiyat" min="0" step="0.01">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="orderNotes">Notlar</label>
+                    <textarea id="orderNotes" name="notlar" rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeOrderModal()">İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Model Card Modal -->
+    <div id="modelCardModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>Model Detayları</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="modelCardContent">
+                <!-- Model detayları buraya yüklenecek -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <script src="app.js?v=1.0.1"></script>
+</body>
+</html> 

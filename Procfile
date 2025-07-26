@@ -1,0 +1,1 @@
+web: gunicorn --chdir backend simple_app:app 
